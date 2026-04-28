@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const taskController = require('../controllers/taskController'); // Check this path!
+const taskController = require('../controllers/taskController');
 const { protect } = require('../middlewares/authMiddleware');
 
 router.use(protect);

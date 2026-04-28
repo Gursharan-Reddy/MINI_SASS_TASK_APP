@@ -7,32 +7,26 @@ export default function Dashboard() {
     const [title, setTitle] = useState('');
     const navigate = useNavigate();
 
-    // 1. Wrap loadTasks in useCallback to keep the function reference stable.
-    // This prevents infinite loops and satisfies the useEffect dependency rule.
     const loadTasks = useCallback(async () => {
         try {
             const { data } = await fetchTasks();
             setTasks(data);
         } catch (error) {
             console.error("Failed to load tasks:", error);
-            // If the token is expired or invalid, send them to login
             if (error.response?.status === 401) {
                 navigate('/login');
             }
         }
     }, [navigate]);
 
-    // 2. The useEffect block exactly as you requested
     useEffect(() => {
         const initDashboard = async () => {
             await loadTasks();
         };
         
         initDashboard();
-        // loadTasks is a stable dependency now because of useCallback
     }, [loadTasks]);
 
-    // 3. Task Handlers
     const handleAdd = async (e) => {
         e.preventDefault();
         if (!title.trim()) return;
