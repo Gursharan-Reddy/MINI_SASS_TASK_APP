@@ -6,7 +6,13 @@ const { sequelize } = require('./models/index');
 const app = express();
 
 // 1. Global Middlewares
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:5173', 
+    'https://mini-sass-task-app.vercel.app/dashboard' // Add your actual Vercel URL here
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 // 2. Route Definitions
