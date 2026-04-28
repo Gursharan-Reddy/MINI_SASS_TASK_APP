@@ -9,7 +9,7 @@ const app = express();
 app.use(cors({
   origin: [
     'http://localhost:5173', 
-    'https://mini-sass-task-app.vercel.app/dashboard' // Add your actual Vercel URL here
+    'https://mini-sass-task-app.vercel.app' // Removed '/dashboard'
   ],
   credentials: true
 }));
@@ -19,7 +19,7 @@ app.use(express.json());
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/tasks', require('./routes/taskRoutes'));
 
-// 3. Health Check Route (To verify server is alive)
+// 3. Health Check Route
 app.get('/', (req, res) => res.send('Task SaaS Backend is running...'));
 
 const PORT = process.env.PORT || 5000;
@@ -29,21 +29,20 @@ const startApp = async () => {
     try {
         console.log('⏳ Connecting to Neon Database...');
         
-        // This checks if the connection works
         await sequelize.authenticate();
         console.log('✅ Database connection established successfully.');
 
-        // This syncs the models with the database
+        // 'alter: true' is good for development to update tables automatically
         await sequelize.sync({ alter: true });
         console.log('✅ Database tables synchronized.');
 
         app.listen(PORT, () => {
-            console.log(`🚀 Server is listening on http://localhost:${PORT}`);
+            console.log(`🚀 Server is listening on port ${PORT}`);
         });
     } catch (error) {
         console.error('❌ Unable to start the server:');
-        console.error(error); // This will tell us exactly what went wrong
-        process.exit(1); // Exit with failure
+        console.error(error);
+        process.exit(1);
     }
 };
 
